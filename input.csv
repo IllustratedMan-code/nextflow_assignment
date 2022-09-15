@@ -1,0 +1,10 @@
+shortname,read1,read2,condition
+sars1_rep_A,/seqs/sars1_rep_A_read1.fasta,/seqs/sars1_rep_A_read1.fasta,sars1
+sars1_rep_B,/seqs/sars1_rep_B_read1.fasta,/seqs/sars1_rep_B_read1.fasta,sars1
+sars1_rep_C,/seqs/sars1_rep_B_read1.fasta,/seqs/sars1_rep_B_read1.fasta,sars1
+sars2_rep_A,/seqs/sars2_rep_A_read1.fasta,/seqs/sars2_rep_A_read1.fasta,sars2
+sars2_rep_B,/seqs/sars2_rep_B_read1.fasta,/seqs/sars2_rep_B_read1.fasta,sars2
+sars2_rep_C,/seqs/sars2_rep_B_read1.fasta,/seqs/sars2_rep_B_read1.fasta,sars2
+ctrl_rep_A,/seqs/ctrl_rep_A.fasta,/seqs/ctrl_rep_A.fasta,sars2,ctrl
+ctrl_rep_B,/seqs/ctrl_rep_B.fasta,/seqs/ctrl_rep_B.fasta,sars2,ctrl
+ctrl_rep_C,/seqs/ctrl_rep_C.fasta,/seqs/ctrl_rep_C.fasta,sars2,ctrl
