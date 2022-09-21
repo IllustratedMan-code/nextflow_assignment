@@ -5,23 +5,19 @@ read_pair_channels = Channel.fromFilePairs(params.folder)
 
 process merge_reads {
 
-    publishDir "merge_reads/"
+    publishDir "merge_reads/", mode: "copy"
 
     input:
     tuple val(read_id),path(read_file)
 
     output:
-    path "${read_id}.fa"
+    path '*.fa'
 
     script:
     """
     touch "${read_id}.fa"
     cat $read_file >> "${read_id}.fa"
     """
-}
-
-process condition {
-    
 }
 
 workflow {
