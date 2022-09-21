@@ -1,5 +1,5 @@
 #!/usr/bin/env nextflow
-
+nextflow.enable.dsl=2
 params.folder = "$baseDir/seqs/*read{1,2}.fa"
 read_pair_channels = Channel.fromFilePairs(params.folder)
 
