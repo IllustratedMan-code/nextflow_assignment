@@ -15,8 +15,13 @@ conditions = Channel
     .map { tuple(it.read1, it.read2, it.condition) }
     .groupTuple( by: 2)
 
-process merge_reads {
+//fastqCh = Channel
+//        .fromPath(params.readsLocCsvFile)
+//        .splitCsv(header: true)
+//        .map { tuple(it.short_name,  [file(it.read1), file(it.read2)]) }
 
+process merge_reads {
+    debug true
     publishDir "merge_reads/", mode: "copy"
 
     input:
@@ -29,6 +34,7 @@ process merge_reads {
     """
     touch "${read_id}.fasta"
     cat $read_file >> "${read_id}.fasta"
+
     """
 }
 
