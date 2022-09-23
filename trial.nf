@@ -56,11 +56,18 @@ process combine_condition {
 
 }
 
+//def i = 0
+//def readLocHeader = new File(params.readsLocCsvFile).readLines()[0].split(',')
+//def conditionIdx = readLocHeader.findIndexOf {it == 'condition'}
+//def conditions = new File(params.readsLocCsvFile).readLines().collect {it.split(',')[conditionIdx]}.drop(1).unique()
+//conditions = conditions.collect {[i++,it]}
+//def conditionPairs = [conditions,conditions].combinations().findAll {it[1][0] > it[0][0] }.collect {[it[0][1],it[1][1]]}
+
 
 workflow {
     //condition_channel.view()
     //read_pair_channels.view()
-    merge_reads(file_csv).join(condition_channel, by: 1).groupTuple(by: 2) | combine_condition
+    //merge_reads(file_csv).join(condition_channel, by: 1).groupTuple(by: 2). | combine_condition
     //conditions.view()
-    //file_csv | merge_reads | 
+    //file_csv | merge_reads |
 }
