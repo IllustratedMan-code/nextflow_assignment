@@ -1,7 +1,19 @@
 #!/usr/bin/env nextflow
 
-params.folder = "$baseDir/seqs/*read{1,2}.fa"
-read_pair_channels = Channel.fromFilePairs(params.folder)
+nextflow.enable.dsl = 2
+
+params.data_dir = "$baseDir/seqs/"
+params.folder = "$baseDir/seqs/*read{1,2}.fasta"
+params.csv = "$baseDir/input.csv"
+//read_pair_channels = Channel.fromFilePairs(params.folder)
+
+file_csv = Channel.fromPath(params.csv).splitCsv(header: true).map{ tuple(it.shortname, ["$baseDir${it.read1}", "$baseDir${it.read2}"]) }
+condition_channel = Channel.fromPath(params.csv).splitCsv(header: true).map{ tuple(it.condition, it.shortname) }
+conditions = Channel
+    .fromPath(params.csv)
+    .splitCsv(header: true)
+    .map { tuple(it.read1, it.read2, it.condition) }
+    .groupTuple( by: 2)
 
 //fastqCh = Channel
 //        .fromPath(params.readsLocCsvFile)
@@ -16,33 +28,39 @@ process merge_reads {
     tuple val(read_id),path(read_file)
 
     output:
-    path '*.fa'
+    tuple path('*.fasta'), val(read_id)
 
     script:
     """
-    cat $read_file >> "${read_id}.fa"
-    echo $read_file
+    touch "${read_id}.fasta"
+    cat $read_file >> "${read_id}.fasta"
+
     """
 }
 
 process combine_condition {
-    debug true
-    publishDir "merge_condition"
+
+    publishDir "combine_condition_reads/", mode: "copy"
 
     input:
-    path read_file
+    tuple val(shortname),path(read_file),val(condition)
 
     output:
-    path "*.fa"
-    
-    shell: 
-    '''
-    condition=$(echo !{read_file} | gawk 'match($0, /^([^_]*)_/, condition) {print condition[1]}')
-    cat !{read_file} >> "${condition}.fa"
-    echo "${condition}.fa"
-    '''
+    path('*.fasta')
+
+    script:
+    """
+    touch "${condition}.fasta"
+    cat $read_file >> "${condition}.fasta"
+    """
+
 }
 
+
 workflow {
-    read_pair_channels | merge_reads | combine_condition
+    //condition_channel.view()
+    //read_pair_channels.view()
+    merge_reads(file_csv).join(condition_channel, by: 1).groupTuple(by: 2) | combine_condition
+    //conditions.view()
+    //file_csv | merge_reads | 
 }
